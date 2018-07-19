@@ -17,6 +17,7 @@ module LogStasher
         data.merge! extract_exception(payload)
         data.merge! LogStasher.store
         data.merge! extract_custom_fields(payload)
+        data.merge! extract_custom_error
 
         tags = ['request']
         tags.push('exception') if payload[:exception]
@@ -83,6 +84,14 @@ module LogStasher
         end
       end
 
+      def extract_custom_error
+        {
+          custom_status: RequestStore.store[:custom_status],
+          error_message: RequestStore.store[:error_message],
+          remark: RequestStore.store[:remark]
+        }
+      end
+
       # Monkey patching to enable exception logging
       def extract_exception(payload)
         if payload[:exception]
@@ -96,7 +105,7 @@ module LogStasher
           message = "#{exception}\n#{message}\n#{backtrace}"
           { :status => status, :error => message }
         else
-          {}
+          { :error => '' }
         end
       end
     end
