@@ -105,7 +105,7 @@ module LogStasher
           message = "#{exception}\n#{message}\n#{backtrace}"
           { :status => status, :error => message }
         else
-          { :error => '' }
+          { :error => RequestStore.store[:error] || '' }
         end
       end
     end
