@@ -86,9 +86,9 @@ module LogStasher
 
       def extract_custom_error
         {
-          custom_status: RequestStore.store[:custom_status],
-          error_message: RequestStore.store[:error_message],
-          remark: RequestStore.store[:remark]
+          custom_status: RequestStore.store[:custom_status] || 0,
+          error_message: RequestStore.store[:error_message] || '',
+          remark: RequestStore.store[:remark] || ''
         }
       end
 
